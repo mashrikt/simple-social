@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  web: &web
+    build: .
+    volumes:
+      - ./media:/media
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    environment:
+      - ALLOWED_HOSTS=*
+      - DEBUG=True
+      - DATABASE_URL=postgres://simple_store:simple_store@db:5432/simple_store
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=pr+u+7*3vhvo&w+sbwp9%X181@4&*o#x-+*sz9mseva71sc7ul
+    command: >
+      bash -c "./manage.py migrate &&
+               ./manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:14.2
+    environment:
+      - POSTGRES_USER=simple_store
+      - POSTGRES_PASSWORD=simple_store
+      - POSTGRES_DB=simple_store
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - db:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U simple_store"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    <<: *web
+    depends_on:
+      - db
+      - redis
+    ports: []
+    command: celery -A simple_social worker --loglevel=info
+
+  redis:
+    image: redis:6.2
+
+volumes:
+  db:
