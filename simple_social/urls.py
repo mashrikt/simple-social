@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from .socials.urls import posts_patterns
 from .users.urls import auth_patterns
 
 
 api_patterns = [
     path('auth/', include(arg=(auth_patterns, 'auth_patterns'), namespace='auth')),
+    path('posts/', include(arg=(posts_patterns, 'posts_patterns'), namespace='posts')),
 ]
 
 urlpatterns = [

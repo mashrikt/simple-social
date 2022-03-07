@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.template.defaultfilters import truncatechars
+from django.utils.functional import cached_property
 
 
 User = get_user_model()
@@ -17,16 +18,19 @@ class Post(AbstractTimeStampMoodel):
     text = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
 
-    @property
-    def short_description(self):
-        return truncatechars(self.text, 20)
-
     class Meta:
         ordering = ('-created_at',)
 
     def __str__(self):
         return f'{self.short_description} by {self.created_by}'
 
+    @property
+    def short_description(self):
+        return truncatechars(self.text, 20)
+
+    @cached_property
+    def get_reaction_count(self):
+        return Reaction.objects.filter(post=self).values_list('type').annotate(total=models.Count('post'))
 
 class Reaction(AbstractTimeStampMoodel):
     LIKE = 'LIKE'
