@@ -1,7 +1,12 @@
-from .models import User
+from allauth.account.models import EmailAddress
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
+from django.contrib.sites.models import Site
 from django.utils.translation import gettext_lazy as _
+from rest_framework.authtoken.models import TokenProxy
+
+from .models import User
 
 
 class CustomUserAdmin(UserAdmin):
@@ -25,3 +30,7 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
+admin.site.unregister(EmailAddress)
+admin.site.unregister(Group)
+admin.site.unregister(Site)
+admin.site.unregister(TokenProxy)
