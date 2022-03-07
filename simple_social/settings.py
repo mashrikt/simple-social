@@ -150,6 +150,9 @@ REST_USE_JWT = True
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'simple_social.users.serializers.LoginSerializer',
 }
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'simple_social.users.serializers.RegisterSerializer',
+}
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
