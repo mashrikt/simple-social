@@ -31,8 +31,9 @@ class RegisterSerializer(AuthRegisterSerializer):
         adapter = get_adapter()
         user = adapter.new_user(request)
 
-        client_ip, _ = get_client_ip(request)
-        user.registration_ip=client_ip
+        client_ip, is_routable = get_client_ip(request)
+        user.registration_ip = client_ip
+        user.is_registration_ip_routable = is_routable
 
         self.cleaned_data = self.get_cleaned_data()
         user = adapter.save_user(request, user, self, commit=False)

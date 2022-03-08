@@ -166,3 +166,21 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'PAGE_SIZE': 10
 }
+
+
+ABSTRACT_API = {
+    'DOMAIN': 'abstractapi.com',
+    'VERSION': 'v1',
+    'EMAIL_VALIDATION': {
+        'SUBDOMAIN': 'emailvalidation',
+        'API_KEY': config('EMAIL_VALIDATION_API_KEY', default=''),
+    },
+    'IP_GEOLOCATION': {
+        'SUBDOMAIN': 'ipgeolocation',
+        'API_KEY': config('IP_GEOLOCATION_API_KEY', default=''),
+    },
+    'HOLIDAYS': {
+        'SUBDOMAIN': 'holidays',
+        'API_KEY': config('HOLIDAYS_API_KEY', default=''),
+    }
+}

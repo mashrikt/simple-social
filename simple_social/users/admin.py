@@ -15,7 +15,8 @@ class CustomUserAdmin(UserAdmin):
         (_('Personal info'), {'fields': ('first_name', 'last_name',)}),
         (_('Permissions'), {'fields': ('is_active', 'is_email_verified', 'is_staff', 'is_superuser')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-        (_('Geolocation'), {'fields': ('registration_ip', 'location_data', 'is_date_joined_local_holiday')}),
+        (_('Geolocation'), {'fields': ('registration_ip', 'is_registration_ip_routable', 'location_data',
+            'is_date_joined_local_holiday')}),
     )
     add_fieldsets = (
         (None, {

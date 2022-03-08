@@ -1,4 +1,3 @@
-from email.policy import default
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
@@ -56,6 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Designates the IP address of the user during sign up."
         ),
     )
+    is_registration_ip_routable = models.BooleanField(blank=True, null=True)
     location_data = models.JSONField(blank=True, default=dict)
 
 
@@ -86,3 +86,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         pass
+
+    def validate_email(self):
+        from .tasks import validate_email
+        validate_email.delay(self.email)
+
+    def enhance_geolocation(self):
+        # The two tasks are chained. get_user_location_data will run first and then after completion
+        # has_user_registered_on_a_holiday will run
+        from .tasks import get_user_location_data, has_user_registered_on_a_holiday
+        (get_user_location_data.si(self.email) | has_user_registered_on_a_holiday.si(self.email))()
