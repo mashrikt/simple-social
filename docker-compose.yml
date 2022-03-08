@@ -7,8 +7,10 @@ services:
       - ./media:/media
       - .:/app
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       - ALLOWED_HOSTS=*
       - DEBUG=True
@@ -39,8 +41,10 @@ services:
   worker:
     <<: *web
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
     ports: []
     command: celery -A simple_social worker --loglevel=info
 
