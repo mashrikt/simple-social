@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth',
+    'drf_yasg',
 
     'simple_social.socials',
     'simple_social.users',
