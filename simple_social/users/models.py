@@ -95,4 +95,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         # The two tasks are chained. get_user_location_data will run first and then after completion
         # has_user_registered_on_a_holiday will run
         from .tasks import get_user_location_data, has_user_registered_on_a_holiday
-        (get_user_location_data.si(self.email) | has_user_registered_on_a_holiday.si(self.email))()
+        (get_user_location_data.si(self.email) | has_user_registered_on_a_holiday.si(self.email)).delay()
