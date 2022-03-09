@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 import pytest
+from datetime import datetime, timedelta
 from django.urls import reverse
 from faker import Faker
 from rest_framework_simplejwt.state import token_backend
