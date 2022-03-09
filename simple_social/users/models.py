@@ -34,8 +34,8 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Unselect this instead of deleting accounts."
         ),
     )
-    is_email_verified = models.BooleanField(
-        _("email verified"),
+    is_email_format_valid = models.BooleanField(
+        _("email format valid"),
         null=True,
         help_text=_(
             "Designates whether this user has a valid email address."

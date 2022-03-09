@@ -9,7 +9,7 @@ class UserFactory(DjangoModelFactory):
     email = Faker('email')
     password = PostGenerationMethodCall('set_password', 'test_pass')
     is_active = True
-    is_email_verified = True
+    is_email_format_valid = True
 
     class Meta:
         model = User

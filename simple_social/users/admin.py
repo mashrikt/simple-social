@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name',)}),
-        (_('Permissions'), {'fields': ('is_active', 'is_email_verified', 'is_staff', 'is_superuser')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_email_format_valid', 'is_staff', 'is_superuser')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('Geolocation'), {'fields': ('registration_ip', 'is_registration_ip_routable', 'location_data',
             'is_date_joined_local_holiday')}),
@@ -24,7 +24,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'password1', 'password2')}
          ),
     )
-    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_active', 'is_email_verified')
+    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_active', 'is_email_format_valid')
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
     readonly_fields = ('date_joined', 'last_login')

@@ -16,8 +16,12 @@ class LoginSerializer(AuthLoginSerializer):
             msg = _('User account is disabled.')
             raise exceptions.ValidationError(msg)
 
-        if not user.is_email_verified:
-            msg = _('User email address is not verified.')
+        if user.is_email_format_valid is None:
+            msg = _('User email address format validation is not complete yet.')
+            raise exceptions.ValidationError(msg)
+
+        if not user.is_email_format_valid:
+            msg = _('User email address is invalid.')
             raise exceptions.ValidationError(msg)
 
 

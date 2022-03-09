@@ -17,7 +17,7 @@ def validate_email(email):
     response = requests.get(url)
     response.raise_for_status()
     is_email_valid = response.json()['is_valid_format']['value']
-    User.objects.filter(email__iexact=email).update(is_email_verified=is_email_valid)
+    User.objects.filter(email__iexact=email).update(is_email_format_valid=is_email_valid)
 
 
 @app.task(autoretry_for=(RequestException,), retry_backoff=True)

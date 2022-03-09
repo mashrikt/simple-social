@@ -30,7 +30,7 @@ class TestRegistration:
         user = User.objects.get(id=response.data['pk'])
         assert user.check_password(password)
         assert user.is_active == True
-        assert user.is_email_verified is None
+        assert user.is_email_format_valid is None
 
     def test_password_mismatch(self, client, url, registration_data):
         registration_data['password2'] = fake.password()
@@ -112,3 +112,35 @@ class TestLogin:
         response = client.post(url, data)
         assert response.status_code == 400
         assert response.data['non_field_errors'][0] == 'Unable to log in with provided credentials.'
+
+    def test_inactive(self, client, url, user, password):
+        user.is_active = False
+        user.save()
+        data = {
+            'email': user.email,
+            'password': password
+        }
+        response = client.post(url, data)
+        assert response.status_code == 400
+
+    def test_email_format_awaiting_verification(self, client, url, user, password):
+        user.is_email_format_valid = None
+        user.save()
+        data = {
+            'email': user.email,
+            'password': password
+        }
+        response = client.post(url, data)
+        assert response.status_code == 400
+        assert response.data['non_field_errors'][0] == 'User email address format validation is not complete yet.'
+
+    def test_email_format_invalid(self, client, url, user, password):
+        user.is_email_format_valid = False
+        user.save()
+        data = {
+            'email': user.email,
+            'password': password
+        }
+        response = client.post(url, data)
+        assert response.status_code == 400
+        assert response.data['non_field_errors'][0] == 'User email address is invalid.'
