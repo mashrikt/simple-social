@@ -1,4 +1,4 @@
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer, SerializerMethodField, UniqueTogetherValidator
@@ -28,9 +28,10 @@ class ReactionSerializer(ModelSerializer):
 
     def save(self, **kwargs):
         try:
-            super().save(**kwargs)
+            with transaction.atomic():
+                super().save(**kwargs)
         except IntegrityError:
-            raise ValidationError({"non_field_errors ": ["User has already reacted to this post."]})
+            raise ValidationError({"non_field_errors": ["User has already reacted to this post."]})
 
 class ReactionDetailSerializer(ModelSerializer):
     class Meta:
